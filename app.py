@@ -11,18 +11,19 @@ cohere_client = cohere.Client(COHERE_API_KEY)
 st.title('🦜🔗 YouTube GPT Creator')
 prompt = st.text_input('Enter your video topic')
 
-def generate_text(prompt, model='command-xlarge-nightly', max_tokens=1000):
+def generate_text(prompt, model='command-r', max_tokens=500):
     try:
-        response = cohere_client.generate(
+        response = cohere_client.chat(
             model=model,
-            prompt=prompt,
-            max_tokens=max_tokens,
+            message=prompt,
             temperature=0.7,
+            max_tokens=max_tokens,
         )
-        return response.generations[0].text.strip()
+        return response.text.strip()
     except Exception as e:
         st.error(f"Error generating text: {e}")
         return None
+
 
 
 def fetch_pixabay_images(query):
@@ -88,3 +89,4 @@ if prompt:
             st.write("### Related GIFs:")
             for gif in gifs:
                 st.image(gif['images']['fixed_height']['url'], caption=gif['title'])
+
